@@ -17,13 +17,17 @@ package com.google.firebase.codelab.mlkit;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
+import android.content.Intent;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.util.Pair;
@@ -32,7 +36,10 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.Continuation;
@@ -68,10 +75,17 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.AbstractMap;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.PriorityQueue;
+import java.util.Collections;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.*;
+import java.util.stream.Collectors;
+import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
     private static final String TAG = "MainActivity";
@@ -126,6 +140,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                     });
     /* Preallocated buffers for storing image data. */
     private final int[] intValues = new int[DIM_IMG_SIZE_X * DIM_IMG_SIZE_Y];
+    private TextView tvView;
+    private RadioGroup radioGroup;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -140,12 +156,31 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         mRunCustomModelButton = findViewById(R.id.button_run_custom_model);*/
         scannedImageView = (ImageView) findViewById(R.id.image_view2);
         mGraphicOverlay = findViewById(R.id.graphic_overlay);
+        tvView = (TextView) findViewById(R.id.tvView);
+        radioGroup = (RadioGroup) findViewById(R.id.rdGroup);
+
+        /*
+         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener()
+        {
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                switch(checkedId){
+                    case R.id.yes:
+                        // do operations specific to this selection
+                        break;
+                    case R.id.no:
+                        // do operations specific to this selection
+                        break;
+
+                }
+         */
+
         mTextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 runTextRecognition();
             }
         });
+
       /*  mFaceButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -165,7 +200,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             }
         });*/
         Spinner dropdown = findViewById(R.id.spinner);
-        String[] items = new String[]{"Image1(rec)","Image2(rec1)","Image3(img)"};
+        String[] items = new String[]{"Image1(rec)","Image2(rec1)","Image3(rec4)","Image4(rec5)","Image5(rec6)"};
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout
                 .simple_spinner_dropdown_item, items);
         dropdown.setAdapter(adapter);
@@ -205,6 +240,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         recognizer.processImage(image)
                 .addOnSuccessListener(
                         new OnSuccessListener<FirebaseVisionText>() {
+                            @RequiresApi(api = Build.VERSION_CODES.N)
                             @Override
                             public void onSuccess(FirebaseVisionText texts) {
                                 mTextButton.setEnabled(true);
@@ -222,6 +258,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                         });
     }
 
+
     private void processTextRecognitionResult(FirebaseVisionText texts) {
         // Replace with code from the codelab to process the text recognition result.
         List<FirebaseVisionText.TextBlock> blocks = texts.getTextBlocks();
@@ -229,6 +266,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             showToast("No text found");
             return;
         }
+        /*String resultText = null;
         mGraphicOverlay.clear();
         for (int i = 0; i < blocks.size(); i++) {
             List<FirebaseVisionText.Line> lines = blocks.get(i).getLines();
@@ -238,11 +276,60 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                     Graphic textGraphic = new TextGraphic(mGraphicOverlay, elements.get(k));
                     mGraphicOverlay.add(textGraphic);
 
-                    Log.d("test", "processTextRecognitionResult:"+textGraphic);
-
+                    resultText = texts.getText();
+                    Log.d(TAG, "onSuccess: Here is the text from the receipt "+resultText);
                 }
             }
         }
+//        String numbers;
+//        numbers=resultText.replaceAll("[^0-9]", "");
+//        Log.d(TAG, "onSuccess: Here is the total from the receipt "+numbers);
+
+        resultText = resultText.replaceAll("[^0-9.]+", " ");
+        //List list = new ArrayList();
+        List<String> list = Arrays.asList(resultText.trim().split(" "));
+        Log.d(TAG, "onSuccess: Here is the all values from the receipt "+ list + "and "+list.size());
+//        Pattern pattern = Pattern.compile(".*[^0-9].*");
+        String regExp = "^\\d+\\.\\d{2}$";
+        List listA = new ArrayList();
+        for (int i = 0; i < list.size(); i++) {
+            if(list.get(i).matches(regExp)) {
+                listA.add(list.get(i));
+           }
+       }
+        Log.d(TAG, "onSuccess: Here is the float values from the receipt " + listA);
+
+        Collections.sort(listA);
+        Log.d(TAG, "onSuccess: Here is the total Value from the receipt " + listA);
+*/
+
+//        float f = Float.valueOf(resultText.replaceAll("[^\\d.]+|\\.(?!\\d)", ""));
+//        Log.d(TAG, "onSuccess: Here is the total from the receipt "+f);
+
+        String resultText = texts.getText();
+        Log.d(TAG, "onSuccess: Here is the text from the receipt "+resultText);
+
+        String regex="([0-9]+[.][0-9]+)";
+        String input= resultText;
+
+        Pattern pattern=Pattern.compile(regex);
+        Matcher matcher=pattern.matcher(input);
+
+        float max =0;
+
+        while(matcher.find())
+        {
+            String floatValues = matcher.group();
+            float finalFloatValues = Float.parseFloat(floatValues);
+            if(finalFloatValues>max){
+                max = finalFloatValues;
+            }
+        }
+
+        Log.d(TAG, "The Total Value is : "+max);
+        Intent intent = getIntent();
+        tvView.setText("Total: " + max);
+
     }
 
     private void runFaceContourDetection() {
@@ -490,8 +577,15 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 mSelectedImage = getBitmapFromAsset(this, "rec1.jpg");
                 break;
             case 2:
-                mSelectedImage = getBitmapFromAsset(this, "img.jpg");
+                mSelectedImage = getBitmapFromAsset(this, "rec4.jpg");
                 break;
+            case 3:
+                mSelectedImage = getBitmapFromAsset(this, "rec5.jpg");
+                break;
+            case 4:
+                mSelectedImage = getBitmapFromAsset(this, "rec6.jpg");
+                break;
+
         }
         if (mSelectedImage != null) {
             // Get the dimensions of the View
