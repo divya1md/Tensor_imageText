@@ -157,7 +157,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         scannedImageView = (ImageView) findViewById(R.id.image_view2);
         mGraphicOverlay = findViewById(R.id.graphic_overlay);
         tvView = (TextView) findViewById(R.id.tvView);
-        radioGroup = (RadioGroup) findViewById(R.id.rdGroup);
+        /*radioGroup = (RadioGroup) findViewById(R.id.rdGroup);*/
 
         /*
          radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener()
@@ -200,7 +200,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             }
         });*/
         Spinner dropdown = findViewById(R.id.spinner);
-        String[] items = new String[]{"Image1(rec)","Image2(rec1)","Image3(rec4)","Image4(rec5)","Image5(rec6)"};
+        String[] items = new String[]{"Image1(rec)","Image2(rec1)","Image3(rec7)","Image4(rec5)","Image5(rec6)"};
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout
                 .simple_spinner_dropdown_item, items);
         dropdown.setAdapter(adapter);
@@ -577,7 +577,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 mSelectedImage = getBitmapFromAsset(this, "rec1.jpg");
                 break;
             case 2:
-                mSelectedImage = getBitmapFromAsset(this, "rec4.jpg");
+                mSelectedImage = getBitmapFromAsset(this, "rec_demo.jpg");
                 break;
             case 3:
                 mSelectedImage = getBitmapFromAsset(this, "rec5.jpg");

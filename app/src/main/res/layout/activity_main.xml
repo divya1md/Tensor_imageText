@@ -66,19 +66,14 @@
         android:orientation="vertical"
         tools:layout_editor_absoluteX="72dp"
         tools:layout_editor_absoluteY="0dp">
-
         <TextView
             android:id="@+id/tvView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_marginBottom="60dp"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:text="@string/is_total_is_correct"></TextView>
+            android:layout_marginBottom="60dp"></TextView>
     </LinearLayout>
-
-    <RadioGroup
+    <!--<RadioGroup
         android:id="@+id/rdGroup"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -108,7 +103,7 @@
             android:text="@string/no"
             tools:ignore="OnClick" />
 
-    </RadioGroup>
+    </RadioGroup>-->
 
     <!--<RadioGroup xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
